@@ -13,4 +13,5 @@ RUN dotnet publish -c Release -o out
 
 # Build runtime image
 RUN dotnet publish -c Release -o out
+
 ENTRYPOINT ["dotnet", "out/EnglishHubApi.dll"]
