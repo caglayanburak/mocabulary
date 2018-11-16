@@ -1,0 +1,17 @@
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/bin/Debug/netcoreapp2.1/xunit.runner.visualstudio.dotnetcore.testadapter.dll
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/bin/Debug/netcoreapp2.1/xunit.runner.reporters.netcoreapp10.dll
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/bin/Debug/netcoreapp2.1/xunit.runner.utility.netcoreapp10.dll
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/bin/Debug/netcoreapp2.1/EnglishHubUnitTest.deps.json
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/bin/Debug/netcoreapp2.1/EnglishHubUnitTest.runtimeconfig.json
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/bin/Debug/netcoreapp2.1/EnglishHubUnitTest.runtimeconfig.dev.json
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/bin/Debug/netcoreapp2.1/EnglishHubUnitTest.dll
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/bin/Debug/netcoreapp2.1/EnglishHubUnitTest.pdb
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/obj/Debug/netcoreapp2.1/EnglishHubUnitTest.csprojAssemblyReference.cache
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/obj/Debug/netcoreapp2.1/EnglishHubUnitTest.csproj.CoreCompileInputs.cache
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/obj/Debug/netcoreapp2.1/EnglishHubUnitTest.AssemblyInfoInputs.cache
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/obj/Debug/netcoreapp2.1/EnglishHubUnitTest.AssemblyInfo.cs
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/obj/Debug/netcoreapp2.1/EnglishHubUnitTest.dll
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/obj/Debug/netcoreapp2.1/EnglishHubUnitTest.pdb
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/bin/Debug/netcoreapp2.1/EnglishHubRepository.dll
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/bin/Debug/netcoreapp2.1/EnglishHubRepository.pdb
+/Users/burakcaglayan/EnglishRemember/EnglishHubUnitTest/obj/Debug/netcoreapp2.1/EnglishHubUnitTest.csproj.CopyComplete
