@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using EnglishHubRepository;
 using Microsoft.Extensions.Options;
+using EnglishHubApi.Models;
 
 namespace EnglishHubApi.Controllers
 {
@@ -60,5 +61,26 @@ namespace EnglishHubApi.Controllers
             var result = await hubRepository.Update(updatedEntity);
             return result;
         }
+
+        public ActionResult<IEnumerable<Question>> GetQuestions()
+        {
+            var result = hubRepository.GetAll().Result.ToList();
+
+            var options = result.Select(x => x.description).ToList();
+            var questions = new List<Question>();
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                var question = new Question();
+                question.QuestionWord = result[i].originalword;
+                question.Answer = result[i].description;
+                question.PrepareOptions(options.Where(x => x != question.Answer).ToList());
+                questions.Add(question);
+            }
+
+            return questions;
+        }
+
+        
     }
 }
