@@ -36,6 +36,7 @@ namespace EnglishHubApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddTransient<IWordRepository>(s => new WordRepository(cs, db));
+            services.AddTransient<IAnswerRepository>(s => new AnswerRepository(cs, db));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

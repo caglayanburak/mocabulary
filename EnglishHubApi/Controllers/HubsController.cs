@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using EnglishHubRepository;
 using Microsoft.Extensions.Options;
 using EnglishHubApi.Models;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace EnglishHubApi.Controllers
 {
@@ -13,6 +16,7 @@ namespace EnglishHubApi.Controllers
     [ApiController]
     public class HubController : ControllerBase
     {
+        static HttpClient client = new HttpClient();
         private IWordRepository hubRepository;
         public HubController(IWordRepository _wordRepository, IOptions<Settings> settings)
         {
@@ -24,6 +28,14 @@ namespace EnglishHubApi.Controllers
         {
             var result = hubRepository.GetAll().Result;
             return result;
+        }
+
+        public  Task<string> GetSentence(string word)
+        {
+            client.DefaultRequestHeaders.Add("app_id", "4d31cebf");
+            client.DefaultRequestHeaders.Add("app_key", "9c6555d3737099ff71385bfccc819494");
+            HttpResponseMessage response = client.GetAsync("https://od-api.oxforddictionaries.com/api/v1/entries/en/"+word+"/sentences").Result;
+            return response.Content.ReadAsStringAsync();
         }
 
         // GET api/values/5
@@ -81,6 +93,6 @@ namespace EnglishHubApi.Controllers
             return questions;
         }
 
-        
+
     }
 }

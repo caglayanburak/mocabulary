@@ -46,7 +46,8 @@ namespace EnglishHubRepository
 
         public async Task<bool> Remove(string id)
         {
-            var filter = Builders<WordEntity>.Filter.Eq("_id", id);
+            var filter = Builders<WordEntity>.Filter.Eq("_id",new ObjectId(id));
+        
             var result = await this.context.Words.DeleteOneAsync(filter);
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
