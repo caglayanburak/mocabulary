@@ -7,5 +7,6 @@ namespace EnglishHubApi
         public string word { get; set; }
         public string description { get; set; }
         public string userId { get; set; }
+        public string packageId { get; set; }
     }
 }
