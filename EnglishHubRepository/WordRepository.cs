@@ -17,11 +17,11 @@ namespace EnglishHubRepository
 
         public async Task<WordEntity> Add(WordEntity entity)
         {
-            if(string.IsNullOrEmpty(entity.description) || string.IsNullOrEmpty(entity.originalword))
+            if (string.IsNullOrEmpty(entity.description) || string.IsNullOrEmpty(entity.originalword))
             {
                 throw new ArgumentNullException("At least one of word or menaning is filled");
             }
-            
+
             var filter = Builders<WordEntity>.Filter.Eq("originalword", entity.originalword);
             var hasAddedWord = await this.context.Words.Find(filter).FirstOrDefaultAsync();
             if (hasAddedWord != null)
@@ -38,6 +38,12 @@ namespace EnglishHubRepository
             return this.context.Words.Find<WordEntity>(new BsonDocument { { "_id", new ObjectId(id) } }).FirstOrDefaultAsync();
         }
 
+        public Task<List<WordEntity>> GetWordsByUserId(string userId)
+        {
+            var filter = Builders<WordEntity>.Filter.Eq("userId", userId);
+            return this.context.Words.Find<WordEntity>(filter).ToListAsync();
+        }
+
         public Task<List<WordEntity>> GetAll()
         {
             var result = this.context.Words.Find<WordEntity>(new BsonDocument()).ToListAsync();
@@ -46,8 +52,8 @@ namespace EnglishHubRepository
 
         public async Task<bool> Remove(string id)
         {
-            var filter = Builders<WordEntity>.Filter.Eq("_id",new ObjectId(id));
-        
+            var filter = Builders<WordEntity>.Filter.Eq("_id", new ObjectId(id));
+
             var result = await this.context.Words.DeleteOneAsync(filter);
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
@@ -69,6 +75,18 @@ namespace EnglishHubRepository
             var result = await this.context.Words.UpdateOneAsync(filter, update);
 
             return result.IsAcknowledged && result.ModifiedCount > 0;
+        }
+
+        public async Task<PackageEntity> AddPackage(PackageEntity entity)
+        {
+            await this.context.Packages.InsertOneAsync(entity);
+            return entity;
+        }
+
+        public Task<List<PackageEntity>> GetPackagesByUserId(string userId)
+        {
+            var filter = Builders<PackageEntity>.Filter.Eq("userId", userId);
+            return this.context.Packages.Find<PackageEntity>(filter).ToListAsync();
         }
     }
 }

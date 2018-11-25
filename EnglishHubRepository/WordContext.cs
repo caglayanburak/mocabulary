@@ -27,5 +27,12 @@ namespace EnglishHubRepository
                 return _database.GetCollection<AnswerEntity>("answers");
             }
         } 
+
+        public IMongoCollection<PackageEntity> Packages
+        {
+            get{
+                return _database.GetCollection<PackageEntity>("packages");
+            }
+        } 
     }
 }

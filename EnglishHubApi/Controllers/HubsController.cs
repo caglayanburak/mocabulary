@@ -16,7 +16,6 @@ namespace EnglishHubApi.Controllers
     [ApiController]
     public class HubController : ControllerBase
     {
-        static HttpClient client = new HttpClient();
         private IWordRepository hubRepository;
         public HubController(IWordRepository _wordRepository, IOptions<Settings> settings)
         {
@@ -30,11 +29,14 @@ namespace EnglishHubApi.Controllers
             return result;
         }
 
-        public  Task<string> GetSentence(string word)
+        public Task<string> GetSentence(string word)
         {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.ConnectionClose = false;
             client.DefaultRequestHeaders.Add("app_id", "4d31cebf");
             client.DefaultRequestHeaders.Add("app_key", "9c6555d3737099ff71385bfccc819494");
-            HttpResponseMessage response = client.GetAsync("https://od-api.oxforddictionaries.com/api/v1/entries/en/"+word+"/sentences").Result;
+            HttpResponseMessage response = client.GetAsync("https://od-api.oxforddictionaries.com/api/v1/entries/en/" + word + "/sentences").Result;
             return response.Content.ReadAsStringAsync();
         }
 
@@ -42,7 +44,7 @@ namespace EnglishHubApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody]WordRequestEntity word)
         {
-            var result = await hubRepository.Add(new WordEntity { originalword = word.word, description = word.description });
+            var result = await hubRepository.Add(new WordEntity { originalword = word.word, description = word.description, userId = word.userId });
             return Ok(result);
         }
 
@@ -93,6 +95,25 @@ namespace EnglishHubApi.Controllers
             return questions;
         }
 
+        [HttpGet]
+        public IEnumerable<WordEntity> GetWordsByUserId(string userId)
+        {
+            var result = this.hubRepository.GetWordsByUserId(userId).Result;
+            return result;
+        }
 
+        [HttpGet]
+        public IEnumerable<PackageEntity> GetPackagesByUserId(string userId)
+        {
+            var result = this.hubRepository.GetPackagesByUserId(userId).Result;
+            return result;
+        }
+
+        [HttpPost]
+        public Task<PackageEntity> AddPackage(PackageEntity packageEntity)
+        {
+            var result = this.hubRepository.AddPackage(packageEntity);
+            return result;
+        }
     }
 }

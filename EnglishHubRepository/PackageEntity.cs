@@ -2,11 +2,10 @@ using MongoDB.Bson;
 
 namespace EnglishHubRepository
 {
-    public class WordEntity
+    public class PackageEntity
     {
         public ObjectId _id { get; set; }
-        public string originalword { get; set; }
-        public string description { get; set; }
+        public string name { get; set; }
         public string userId { get; set; }
     }
 }

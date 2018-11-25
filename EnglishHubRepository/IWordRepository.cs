@@ -15,5 +15,11 @@ namespace EnglishHubRepository
          Task<bool> Update(WordEntity entity);
 
          Task<bool> RemoveAll();
+
+         Task<List<WordEntity>> GetWordsByUserId(string userId);
+
+         Task<List<PackageEntity>> GetPackagesByUserId(string userId);
+
+         Task<PackageEntity> AddPackage(PackageEntity entity);
     }
 }
