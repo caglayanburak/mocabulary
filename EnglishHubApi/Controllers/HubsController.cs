@@ -96,9 +96,9 @@ namespace EnglishHubApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WordEntity> GetWordsByUserId(string userId)
+        public IEnumerable<WordEntity> GetWordsByUserId(string userId, string packageId)
         {
-            var result = this.hubRepository.GetWordsByUserId(userId).Result;
+            var result = this.hubRepository.GetWordsByUserId(userId, packageId).Result;
             return result;
         }
 

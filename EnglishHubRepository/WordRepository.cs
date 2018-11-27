@@ -38,9 +38,10 @@ namespace EnglishHubRepository
             return this.context.Words.Find<WordEntity>(new BsonDocument { { "_id", new ObjectId(id) } }).FirstOrDefaultAsync();
         }
 
-        public Task<List<WordEntity>> GetWordsByUserId(string userId)
+        public Task<List<WordEntity>> GetWordsByUserId(string userId, string packageId)
         {
-            var filter = Builders<WordEntity>.Filter.Eq("userId", userId);
+            var builder = Builders<WordEntity>.Filter;
+            var filter = (builder.Eq("userId", userId) & builder.Eq("packageId", packageId));
             return this.context.Words.Find<WordEntity>(filter).ToListAsync();
         }
 
