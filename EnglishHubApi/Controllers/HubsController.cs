@@ -44,7 +44,7 @@ namespace EnglishHubApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody]WordRequestEntity word)
         {
-            var result = await hubRepository.Add(new WordEntity { originalword = word.word, description = word.description, userId = word.userId });
+            var result = await hubRepository.Add(new WordEntity { originalword = word.word, description = word.description, userId = word.userId, packageId = word.packageId });
             return Ok(result);
         }
 
