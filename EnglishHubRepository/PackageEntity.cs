@@ -1,4 +1,5 @@
 using MongoDB.Bson;
+using System.Collections.Generic;
 
 namespace EnglishHubRepository
 {
@@ -7,5 +8,8 @@ namespace EnglishHubRepository
         public ObjectId _id { get; set; }
         public string name { get; set; }
         public string userId { get; set; }
+        public bool isFavorite { get; set; }
+
+        public List<WordEntity> words { get; set; }
     }
 }

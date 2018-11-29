@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using MongoDB.Bson;
 
 namespace EnglishHubRepository
 {
@@ -8,7 +9,7 @@ namespace EnglishHubRepository
     {
         Task<List<WordEntity>> GetAll();
         Task<WordEntity> Get(string id);
-        Task<WordEntity> Add(WordEntity entity);
+        Task<bool> Add(WordEntity entity);
 
         Task<bool> Remove(string id);
 
@@ -21,5 +22,8 @@ namespace EnglishHubRepository
         Task<List<PackageEntity>> GetPackagesByUserId(string userId);
 
         Task<PackageEntity> AddPackage(PackageEntity entity);
+        Task<bool> UpdatePackage(PackageEntity entity);
+        Task<bool> RemovePackage(string id);
+        Task<bool> FavoritePackage(string id, bool status);
     }
 }

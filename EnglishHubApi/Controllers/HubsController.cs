@@ -9,6 +9,7 @@ using EnglishHubApi.Models;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using MongoDB.Bson;
 
 namespace EnglishHubApi.Controllers
 {
@@ -44,7 +45,15 @@ namespace EnglishHubApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody]WordRequestEntity word)
         {
-            var result = await hubRepository.Add(new WordEntity { originalword = word.word, description = word.description, userId = word.userId, packageId = word.packageId });
+            var result = await hubRepository.Add(new WordEntity
+            {
+                originalword = word.word,
+                description = word.description,
+                userId = word.userId,
+                packageId = word.packageId,
+                synonym = word.synonym,
+                ownSentence = word.ownSentence
+            });
             return Ok(result);
         }
 
@@ -70,6 +79,8 @@ namespace EnglishHubApi.Controllers
             {
                 originalword = entity.word,
                 description = entity.description,
+                ownSentence = entity.ownSentence,
+                synonym = entity.synonym,
                 _id = new MongoDB.Bson.ObjectId(entity.id)
             };
             var result = await hubRepository.Update(updatedEntity);
@@ -102,18 +113,49 @@ namespace EnglishHubApi.Controllers
             return result;
         }
 
-        [HttpGet]
-        public IEnumerable<PackageEntity> GetPackagesByUserId(string userId)
-        {
-            var result = this.hubRepository.GetPackagesByUserId(userId).Result;
-            return result;
-        }
+        // [HttpGet]
+        // public IEnumerable<PackageEntity> GetPackagesByUserId(string userId)
+        // {
+        //     var result = this.hubRepository.GetPackagesByUserId(userId).Result;
+        //     return result;
+        // }
 
         [HttpPost]
         public Task<PackageEntity> AddPackage(PackageEntity packageEntity)
         {
             var result = this.hubRepository.AddPackage(packageEntity);
             return result;
+        }
+
+        [HttpPost]
+        public Task<bool> UpdatePackage(PackageEntityRequest request)
+        {
+            var result = this.hubRepository.UpdatePackage(new PackageEntity()
+            {
+                name = request.name,
+                _id = new ObjectId(request._id),
+                
+            });
+            return result;
+        }
+
+        [HttpPost]
+        public async Task<bool> RemovePackage([FromQuery]string id)
+        {
+            var result = await hubRepository.RemovePackage(id);
+            return result;
+        }
+
+        [HttpGet]
+        public async Task<bool> FavoritePackage([FromQuery]string id, [FromQuery]bool status)
+        {
+            var result = await hubRepository.FavoritePackage(id, status);
+            return result;
+        }
+
+        public Task<List<PackageEntity>> GetPackages(string id)
+        {
+            return hubRepository.GetPackagesByUserId(id);
         }
     }
 }

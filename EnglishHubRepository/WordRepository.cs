@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 
 namespace EnglishHubRepository
 {
@@ -15,21 +16,14 @@ namespace EnglishHubRepository
             context = new WordContext(connectionString, databaseName);
         }
 
-        public async Task<WordEntity> Add(WordEntity entity)
+        public async Task<bool> Add(WordEntity entity)
         {
-            if (string.IsNullOrEmpty(entity.description) || string.IsNullOrEmpty(entity.originalword))
-            {
-                throw new ArgumentNullException("At least one of word or menaning is filled");
-            }
+            var filter = Builders<PackageEntity>.Filter.Eq("_id", new ObjectId(entity.packageId));
+            var update = Builders<PackageEntity>.Update.Push("words", entity);
 
-            var filter = Builders<WordEntity>.Filter.Eq("originalword", entity.originalword);
-            var hasAddedWord = await this.context.Words.Find(filter).FirstOrDefaultAsync();
-            if (hasAddedWord != null)
-            {
-                return hasAddedWord;
-            }
-            await this.context.Words.InsertOneAsync(entity);
-            return entity;
+            var result = await this.context.Packages.UpdateOneAsync(filter, update);
+
+            return result.IsAcknowledged && result.ModifiedCount > 0;
         }
 
         public Task<WordEntity> Get(string id)
@@ -38,11 +32,14 @@ namespace EnglishHubRepository
             return this.context.Words.Find<WordEntity>(new BsonDocument { { "_id", new ObjectId(id) } }).FirstOrDefaultAsync();
         }
 
-        public Task<List<WordEntity>> GetWordsByUserId(string userId, string packageId)
+        public async Task<List<WordEntity>> GetWordsByUserId(string userId, string packageId)
         {
-            var builder = Builders<WordEntity>.Filter;
-            var filter = (builder.Eq("userId", userId) & builder.Eq("packageId", packageId));
-            return this.context.Words.Find<WordEntity>(filter).ToListAsync();
+            var builder = Builders<PackageEntity>.Filter;
+            var filter = (builder.Eq("userId", userId) & builder.Eq("_id", new ObjectId(packageId)));
+            var result = await this.context.Packages.Find<PackageEntity>(filter).ToListAsync();
+
+            var r = result.Select(x => x.words).FirstOrDefault();
+            return r;
         }
 
         public Task<List<WordEntity>> GetAll()
@@ -71,6 +68,8 @@ namespace EnglishHubRepository
             var filter = Builders<WordEntity>.Filter.Eq("_id", entity._id);
             var update = Builders<WordEntity>.Update
             .Set(s => s.originalword, entity.originalword)
+            .Set(s => s.synonym, entity.synonym)
+            .Set(s => s.ownSentence, entity.ownSentence)
             .Set(s => s.description, entity.description);
 
             var result = await this.context.Words.UpdateOneAsync(filter, update);
@@ -84,10 +83,44 @@ namespace EnglishHubRepository
             return entity;
         }
 
-        public Task<List<PackageEntity>> GetPackagesByUserId(string userId)
+        public async Task<bool> UpdatePackage(PackageEntity entity)
+        {
+            var filter = Builders<PackageEntity>.Filter.Eq("_id", entity._id);
+            var update = Builders<PackageEntity>.Update
+            .Set(s => s.name, entity.name);
+
+            var result = await this.context.Packages.UpdateOneAsync(filter, update);
+
+            return result.IsAcknowledged && result.ModifiedCount > 0;
+        }
+
+        public async Task<bool> RemovePackage(string id)
+        {
+            var filter = Builders<PackageEntity>.Filter.Eq("_id", new ObjectId(id));
+
+            var result = await this.context.Packages.DeleteOneAsync(filter);
+            return result.IsAcknowledged && result.DeletedCount > 0;
+        }
+
+        public async Task<List<PackageEntity>> GetPackagesByUserId(string userId)
         {
             var filter = Builders<PackageEntity>.Filter.Eq("userId", userId);
-            return this.context.Packages.Find<PackageEntity>(filter).ToListAsync();
+
+            var results = await this.context.Packages.Find<PackageEntity>(filter).ToListAsync();
+
+
+            return results;
+        }
+
+        public async Task<bool> FavoritePackage(string id, bool status)
+        {
+            var filter = Builders<PackageEntity>.Filter.Eq("_id", new ObjectId(id));
+            var update = Builders<PackageEntity>.Update
+            .Set(s => s.isFavorite, status);
+
+            var result = await this.context.Packages.UpdateOneAsync(filter, update);
+
+            return result.IsAcknowledged && result.ModifiedCount > 0;
         }
     }
 }

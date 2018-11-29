@@ -1,4 +1,5 @@
 using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace EnglishHubRepository
 {
@@ -12,6 +13,11 @@ namespace EnglishHubRepository
             {
                 _database = client.GetDatabase(database);
             }
+        }
+
+        public IMongoCollection<BsonDocument> GetDocument(string name)
+        {
+            return _database.GetCollection<BsonDocument>(name);
         }
 
         public IMongoCollection<WordEntity> Words
