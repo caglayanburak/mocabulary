@@ -23,12 +23,12 @@ namespace EnglishHubApi.Controllers
             this.hubRepository = _wordRepository;
         }
         // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<WordEntity>> GetAll()
-        {
-            var result = hubRepository.GetAll().Result;
-            return result;
-        }
+        // [HttpGet]
+        // public ActionResult<IEnumerable<WordEntity>> GetAll()
+        // {
+        //     var result = hubRepository.GetAll().Result;
+        //     return result;
+        // }
 
         public Task<string> GetSentence(string word)
         {
@@ -87,9 +87,9 @@ namespace EnglishHubApi.Controllers
             return result;
         }
 
-        public ActionResult<IEnumerable<Question>> GetQuestions()
+        public ActionResult<IEnumerable<Question>> GetQuestions(string packageId)
         {
-            var result = hubRepository.GetAll().Result.ToList();
+            var result = hubRepository.GetAll(packageId).Result.ToList();
 
             var options = result.Select(x => x.description).ToList();
             var questions = new List<Question>();
@@ -134,7 +134,7 @@ namespace EnglishHubApi.Controllers
             {
                 name = request.name,
                 _id = new ObjectId(request._id),
-                
+
             });
             return result;
         }

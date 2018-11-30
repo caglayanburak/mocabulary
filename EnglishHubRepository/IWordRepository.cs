@@ -7,7 +7,7 @@ namespace EnglishHubRepository
 {
     public interface IWordRepository
     {
-        Task<List<WordEntity>> GetAll();
+        Task<List<WordEntity>> GetAll(string packageId);
         Task<WordEntity> Get(string id);
         Task<bool> Add(WordEntity entity);
 

@@ -42,10 +42,14 @@ namespace EnglishHubRepository
             return r;
         }
 
-        public Task<List<WordEntity>> GetAll()
+        public async Task<List<WordEntity>> GetAll(string packageId)
         {
-            var result = this.context.Words.Find<WordEntity>(new BsonDocument()).ToListAsync();
-            return result;
+            var builder = Builders<PackageEntity>.Filter;
+            var filter = builder.Eq("_id", new ObjectId(packageId));
+            var result = await this.context.Packages.Find<PackageEntity>(filter).ToListAsync();
+
+            var r = result.Select(x => x.words).FirstOrDefault();
+            return r;
         }
 
         public async Task<bool> Remove(string id)
