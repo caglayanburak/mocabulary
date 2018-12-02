@@ -3,7 +3,7 @@ using System.Linq;
 using System;
 using System.Threading;
 
-namespace EnglishHubApi.Models
+namespace EnglishHubRepository.Models
 {
     public class Question
     {
@@ -42,5 +42,30 @@ namespace EnglishHubApi.Models
 
             } while (counter < 3);
         }
+
+        public List<string> GetRandomWords(List<string> words, int totalWord = 4)
+        {
+            int[] numbers = new int[totalWord];
+            var counter = 0;
+            Random random;
+            List<string> qWords = new List<string>();
+
+            do
+            {
+                random = new Random();
+                var randomNumber = random.Next(0, words.Count);
+                if (Array.IndexOf(numbers, randomNumber) == -1)
+                {
+                    numbers[counter] = randomNumber;
+                    qWords.Add(words[randomNumber]);
+                    Console.WriteLine(qWords[counter] + "-" + counter);
+                    counter++;
+                }
+
+            } while (counter < totalWord);
+
+            return qWords;
+        }
+
     }
 }

@@ -39,6 +39,6 @@ namespace EnglishHubRepository
             get{
                 return _database.GetCollection<PackageEntity>("packages");
             }
-        } 
+        }  
     }
 }

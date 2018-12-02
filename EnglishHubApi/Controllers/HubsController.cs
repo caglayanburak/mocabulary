@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using MongoDB.Bson;
+using EnglishHubRepository.Models;
 
 namespace EnglishHubApi.Controllers
 {
@@ -47,6 +48,7 @@ namespace EnglishHubApi.Controllers
         {
             var result = await hubRepository.Add(new WordEntity
             {
+                _id = ObjectId.GenerateNewId(),
                 originalword = word.word,
                 description = word.description,
                 userId = word.userId,
@@ -66,9 +68,9 @@ namespace EnglishHubApi.Controllers
 
         // PUT api/values/5
         [HttpPost]
-        public async Task<bool> Delete([FromQuery]string id)
+        public async Task<bool> Delete([FromQuery]string id, [FromQuery]string packageId)
         {
-            var result = await hubRepository.Remove(id);
+            var result = await hubRepository.Remove(id, packageId);
             return result;
         }
 
@@ -78,6 +80,7 @@ namespace EnglishHubApi.Controllers
             var updatedEntity = new WordEntity
             {
                 originalword = entity.word,
+                packageId = entity.packageId,
                 description = entity.description,
                 ownSentence = entity.ownSentence,
                 synonym = entity.synonym,
@@ -87,23 +90,9 @@ namespace EnglishHubApi.Controllers
             return result;
         }
 
-        public ActionResult<IEnumerable<Question>> GetQuestions(string packageId)
+        public Task<List<Question>> GetQuestions(string packageId, int questionNumber = 20)
         {
-            var result = hubRepository.GetAll(packageId).Result.ToList();
-
-            var options = result.Select(x => x.description).ToList();
-            var questions = new List<Question>();
-
-            for (int i = 0; i < result.Count; i++)
-            {
-                var question = new Question();
-                question.QuestionWord = result[i].originalword;
-                question.Answer = result[i].description;
-                question.PrepareOptions(options.Where(x => x != question.Answer).ToList());
-                questions.Add(question);
-            }
-
-            return questions;
+            return hubRepository.QuestionEntities(packageId, questionNumber);
         }
 
         [HttpGet]
@@ -123,6 +112,7 @@ namespace EnglishHubApi.Controllers
         [HttpPost]
         public Task<PackageEntity> AddPackage(PackageEntity packageEntity)
         {
+            packageEntity.words = new List<WordEntity>();
             var result = this.hubRepository.AddPackage(packageEntity);
             return result;
         }
@@ -156,6 +146,11 @@ namespace EnglishHubApi.Controllers
         public Task<List<PackageEntity>> GetPackages(string id)
         {
             return hubRepository.GetPackagesByUserId(id);
+        }
+
+        public Task<List<Question>> QuestionEntities(string packageId, int questionNumber)
+        {
+            return hubRepository.QuestionEntities(packageId, questionNumber);
         }
     }
 }
