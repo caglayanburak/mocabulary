@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using MongoDB.Bson;
 using EnglishHubRepository.Models;
+using Newtonsoft.Json.Linq;
 
 namespace EnglishHubApi.Controllers
 {
@@ -38,7 +39,8 @@ namespace EnglishHubApi.Controllers
             client.DefaultRequestHeaders.ConnectionClose = false;
             client.DefaultRequestHeaders.Add("app_id", "4d31cebf");
             client.DefaultRequestHeaders.Add("app_key", "9c6555d3737099ff71385bfccc819494");
-            HttpResponseMessage response = client.GetAsync("https://od-api.oxforddictionaries.com/api/v1/entries/en/" + word + "/sentences").Result;
+            HttpResponseMessage response = client.GetAsync("https://od-api.oxforddictionaries.com/api/v1/entries/en/" + word).Result;
+
             return response.Content.ReadAsStringAsync();
         }
 
@@ -54,6 +56,8 @@ namespace EnglishHubApi.Controllers
                 userId = word.userId,
                 packageId = word.packageId,
                 synonym = word.synonym,
+                lexialCategory = word.lexialCategory,
+                definition = word.definition,
                 ownSentence = word.ownSentence
             });
             return Ok(result);
