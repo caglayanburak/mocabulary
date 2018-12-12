@@ -25,7 +25,7 @@ namespace EnglishHubRepository
         Task<PackageEntity> AddPackage(PackageEntity entity);
         Task<bool> UpdatePackage(PackageEntity entity);
         Task<bool> RemovePackage(string id);
-        Task<bool> FavoritePackage(string id, bool status);
+        Task<bool> FavoritePackage(string id, int starCount);
         Task<List<Question>> QuestionEntities(string packageId, int questionNumber);
     }
 }

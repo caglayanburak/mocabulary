@@ -10,6 +10,8 @@ namespace EnglishHubRepository
         public string userId { get; set; }
         public bool isFavorite { get; set; }
 
+        public int starCount { get; set; }
+
         public List<WordEntity> words { get; set; }
     }
 }

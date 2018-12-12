@@ -124,11 +124,11 @@ namespace EnglishHubRepository
             return results;
         }
 
-        public async Task<bool> FavoritePackage(string id, bool status)
+        public async Task<bool> FavoritePackage(string id, int starCount)
         {
             var filter = Builders<PackageEntity>.Filter.Eq("_id", new ObjectId(id));
             var update = Builders<PackageEntity>.Update
-            .Set(s => s.isFavorite, status);
+            .Set(s => s.starCount, starCount);
 
             var result = await this.context.Packages.UpdateOneAsync(filter, update);
 

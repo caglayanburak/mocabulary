@@ -141,9 +141,9 @@ namespace EnglishHubApi.Controllers
         }
 
         [HttpGet]
-        public async Task<bool> FavoritePackage([FromQuery]string id, [FromQuery]bool status)
+        public async Task<bool> FavoritePackage([FromQuery]string id, [FromQuery]int starCount)
         {
-            var result = await hubRepository.FavoritePackage(id, status);
+            var result = await hubRepository.FavoritePackage(id, starCount);
             return result;
         }
 
