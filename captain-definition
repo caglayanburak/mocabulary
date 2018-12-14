@@ -3,6 +3,7 @@
   "dockerfileLines": [
     "FROM microsoft/dotnet:2.1-sdk AS build-env",
     "WORKDIR /app",
+    "RUN ls",
     "COPY Mocabulary.sln ./",
     "COPY EnglishHubRepository/*.csproj ./EnglishHubRepository/",
     "COPY EnglishHubApi/*.csproj ./EnglishHubApi/",
